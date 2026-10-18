@@ -45,6 +45,15 @@ Twenty-four repositories, one theme: a claim about an AI system is not a result 
 | [rewardcoherence](https://github.com/Intermountainh8ter/rewardcoherence) | Scaffold | Does a reward model rank the same responses the same way across temperatures? Kendall tau-b with CI | Statistics only |
 | [tokenwitness](https://github.com/Intermountainh8ter/tokenwitness) | Scaffold | Byte-identity of chat-template rendering across inference stacks | Diff only |
 
+## Trading systems
+
+Same method, different market. Pre-registered, rendered from committed results, honest about what the instrument cannot see.
+
+| Repo | What it does | Status, 18 Oct 2026 |
+| --- | --- | --- |
+| [liqledger](https://github.com/Intermountainh8ter/liqledger) | Open liquidation and MEV observatory: every Aave V3, Spark, and Morpho Blue liquidation on mainnet from a full node, with builder payment, block position, and Chainlink oracle adjacency | 20,930 liquidations over 17 months; 2 of 3 pre-registered predictions wrong, 1 strongly supported (3.2x oracle enrichment) |
+| [walkforward](https://github.com/Intermountainh8ter/walkforward) | Pre-registered backtesting: data hash, grid, and split locked before looking; walk-forward only; deflated Sharpe and probability of backtest overfitting on every run | 4 studies run, none beats buy-and-hold out of sample |
+
 ## Findings so far
 
 Most of them are negative, which is what careful measurement usually produces and what rarely gets published.
