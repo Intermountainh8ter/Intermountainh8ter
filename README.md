@@ -14,11 +14,11 @@ Twenty-four repositories, one theme: a claim about an AI system is not a result 
 
 **Checkers.** Fifteen Rust command-line tools. Each takes a claim someone else published (a benchmark row, a jailbreak attack-success rate, "our agent never exceeds its budget," a secure-hardware attestation) and refuses to grade it until the inputs are pinned. Each writes its thresholds before seeing data, reports a 95% bootstrap interval on every rate, and exits with a code a CI job can read: 0 passed, 1 a named pre-registration clause failed, 2 refused to run because an input was degenerate or uncalibrated.
 
-**Scaffolds.** Three Rust crates whose statistics and pre-registration exist but whose live drivers do not yet. Their READMEs say so in the first screen.
+**Former scaffolds.** Three Rust crates (mcpprobe, rewardcoherence, tokenwitness) whose statistics and pre-registration existed before their live drivers did. On 19 Oct 2026 each gained a live driver and a first result, pre-registered by an appended amendment before the run.
 
 ## The repositories
 
-| Repo | Family | What it asks or checks | Status, 17 Oct 2026 |
+| Repo | Family | What it asks or checks | Status, 19 Oct 2026 |
 | --- | --- | --- | --- |
 | [refusalscope](https://github.com/Intermountainh8ter/refusalscope) | Experiment | Does removing refusal training (abliteration) damage tool calling or increase prompt-injection compliance? | 5 Qwen3 pairs run, 4 pass the manipulation check |
 | [trialgauntlet](https://github.com/Intermountainh8ter/trialgauntlet) | Experiment | pass^k beside pass@k; every environment audited against do-nothing agents first | Qwen3-8B stock vs ablated pair run |
@@ -33,7 +33,7 @@ Twenty-four repositories, one theme: a claim about an AI system is not a result 
 | [retrievalaudit](https://github.com/Intermountainh8ter/retrievalaudit) | Checker | Pin retriever, corpus, generator, k, reranker; precision/recall@k and faithfulness | Built |
 | [kernelwitness](https://github.com/Intermountainh8ter/kernelwitness) | Checker | Rig-fingerprinted GPU kernel timings; same-rig three-sigma reproducibility verdict | Built |
 | [toolguard](https://github.com/Intermountainh8ter/toolguard) | Checker | Dangerous-tool call rate, benign vs injected, with a catalog integrity gate | Built |
-| [guardaudit](https://github.com/Intermountainh8ter/guardaudit) | Checker | Safety-classifier calibration: Brier, ECE, precision/recall at threshold, in and out of distribution | Built |
+| [guardaudit](https://github.com/Intermountainh8ter/guardaudit) | Checker | Safety-classifier calibration: Brier, ECE, precision/recall at threshold, in and out of distribution | First live audit: Llama Guard 3 8B Q8_0 not certified (OOD ECE upper bound 0.065 > 0.05; recall 0.94 passes) |
 | [budgetguard](https://github.com/Intermountainh8ter/budgetguard) | Checker | Do agent frameworks honor token, call, USD, and wall-clock budgets under four scripted breakers? | Built |
 | [shadowtrack](https://github.com/Intermountainh8ter/shadowtrack) | Checker | Shadow-mode agreement between two endpoints with self-agreement baselines | 3 live runs |
 | [attestchain](https://github.com/Intermountainh8ter/attestchain) | Checker | Chain of custody for TEE-attested inference: policy, measurement, nonce, input and output hashes | Built |
@@ -41,18 +41,20 @@ Twenty-four repositories, one theme: a claim about an AI system is not a result 
 | [contamcheck](https://github.com/Intermountainh8ter/contamcheck) | Checker | Benchmark contamination: n-gram overlap, echo canary, loss delta, Holm-corrected | Built |
 | [releaseflag](https://github.com/Intermountainh8ter/releaseflag) | Checker | Fold every upstream verdict into one PASS, HOLD, or BLOCK | Built |
 | [bench-report](https://github.com/Intermountainh8ter/bench-report) | Checker | Render README tables only from committed result files; SHA-256 manifests of results | Built, manifests written |
-| [mcpprobe](https://github.com/Intermountainh8ter/mcpprobe) | Scaffold | pass@k and pass^k for Model Context Protocol servers, with degenerate-caller audits | Estimators only |
-| [rewardcoherence](https://github.com/Intermountainh8ter/rewardcoherence) | Scaffold | Does a reward model rank the same responses the same way across temperatures? Kendall tau-b with CI | Statistics only |
-| [tokenwitness](https://github.com/Intermountainh8ter/tokenwitness) | Scaffold | Byte-identity of chat-template rendering across inference stacks | Diff only |
+| [mcpprobe](https://github.com/Intermountainh8ter/mcpprobe) | Checker | pass@k and pass^k for Model Context Protocol servers, with degenerate-caller audits | 2 reference servers, 10 tasks all 8/8; 2 git tasks flagged by the degenerate-caller audit |
+| [rewardcoherence](https://github.com/Intermountainh8ter/rewardcoherence) | Checker | Does a reward model rank the same responses the same way across temperatures? Kendall tau-b with CI | 1 live audit: tau 0.914, coherent but flagged (length-only ranker 0.98) |
+| [tokenwitness](https://github.com/Intermountainh8ter/tokenwitness) | Checker | Byte-identity of chat-template rendering across inference stacks | 3 stacks, 2 fixtures, byte-identical (null) |
 
 ## Trading systems
 
 Same method, different market. Pre-registered, rendered from committed results, honest about what the instrument cannot see.
 
-| Repo | What it does | Status, 18 Oct 2026 |
+| Repo | What it does | Status, 19 Oct 2026 |
 | --- | --- | --- |
-| [liqledger](https://github.com/Intermountainh8ter/liqledger) | Open liquidation and MEV observatory: every Aave V3, Spark, and Morpho Blue liquidation on mainnet from a full node, with builder payment, block position, and Chainlink oracle adjacency | 20,930 liquidations over 17 months; 2 of 3 pre-registered predictions wrong, 1 strongly supported (3.2x oracle enrichment) |
+| [liqledger](https://github.com/Intermountainh8ter/liqledger) | Open liquidation and MEV observatory: every Aave V3, Spark, and Morpho Blue liquidation on mainnet from a full node, with builder payment, block position, and Chainlink oracle adjacency | 20,930 liquidations over 17 months; 2 of 3 pre-registered predictions wrong, 1 strongly supported (3.2x oracle enrichment); 15,030 priced in USD (median visible bid share 0.43, top decile 0.007); 24 h live follower bound on direct builder payments |
 | [walkforward](https://github.com/Intermountainh8ter/walkforward) | Pre-registered backtesting: data hash, grid, and split locked before looking; walk-forward only; deflated Sharpe and probability of backtest overfitting on every run | 4 studies run, none beats buy-and-hold out of sample |
+| [bookrecord](https://github.com/Intermountainh8ter/bookrecord) | L2 order-book recorder that enforces each venue's continuity rule on every event, logs gaps and resyncs, and verifies its own captures | Binance.US, Kraken (CRC32) and Coinbase (sequence numbers) adapters, each with a verified capture |
+| [fillgate](https://github.com/Intermountainh8ter/fillgate) | Execution engine with a gate in front of every order: idempotent IDs, validated state machine, risk limits, kill switch, chaos-tested simulated exchange, paper-venue adapters | Alpaca paper tick and Hyperliquid testnet signing built (signatures match the venue SDK's vectors); pre-registered paper record not started, no key file yet |
 
 ## Findings so far
 
@@ -64,6 +66,8 @@ Most of them are negative, which is what careful measurement usually produces an
 - **A server at temperature 0 disagreed with itself.** shadowtrack's self-agreement baseline found llama-server under continuous batching reproducing its own answers only 92% of the time, so part of any model-vs-model disagreement on that stack is server noise. The control was built for exactly this and it fired.
 - **The expensive retrieval component earned nothing.** On 17,387 chunks of Ethereum specifications, adding a neural embedder to BM25 moved the top-5 hit rate from 81.46% to 81.46%. Only the reranker clearly helped.
 - **"Zero security failures" can be true and misleading.** txwarden's rule-engine verdict never moved under 245 injection attacks, but the LLM-written explanation told the user to proceed on a blocked transaction 79 times.
+- **A safety classifier can catch nearly everything and still fail calibration.** guardaudit scored Llama Guard 3 8B (Q8_0) on 140 out-of-distribution prompts from its own logprobs: recall 0.94 [0.89, 0.98] and precision 1.00 at its threshold, but ECE 0.040 with an upper bound of 0.065 against a pre-registered gate of 0.05. Not certified.
+- **The degenerate baseline earned its keep on day one.** mcpprobe's two reference MCP servers passed every scripted task 8 of 8, and the audit still flagged two git tasks: with an empty `repo_path` the server answers for its working directory, so the grader was passable without the right argument.
 - **Safety controls that do nothing still get trusted.** fleetgate never violated an invariant across 2,460 adversarial runs and 104,828 policy checks, and two of its four safety settings had no measurable effect on any outcome.
 
 Every number above is rendered from a committed result file by [bench-report](https://github.com/Intermountainh8ter/bench-report) or the repo's own docgen, and the result directories carry SHA-256 manifests.
