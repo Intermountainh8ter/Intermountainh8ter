@@ -31,7 +31,7 @@ Companies and researchers make claims about artificial-intelligence systems all 
 
 **Checkers.** Fifteen tools that take a claim someone else made and refuse to grade it until every input is written down. Think of a referee who will not score a race until the track length, the stopwatch, and the starting line have all been recorded.
 
-**Scaffolds.** Three tools where the math and the written plan exist but the part that talks to a real system does not yet. Their front pages say so.
+**Former scaffolds.** Three tools where the math and the written plan came first and the part that talks to a real system came later. All three ran for the first time on 19 October 2026, each against a real system, with the rules written down before the run.
 
 ## The experiments
 
@@ -64,7 +64,7 @@ Each one answers "can this published claim be checked?" by pinning down the inpu
 - **retrievalaudit.** A document-search-plus-AI system has five moving parts. Change any one and the quality number is a different experiment. This pins all five and checks the answer actually came from the documents it retrieved.
 - **kernelwitness.** A graphics-card speed number only means something on the exact machine and driver it was measured on. This records the whole fingerprint beside the number and refuses to call a result "reproduced" when the machine differs.
 - **toolguard.** An agent with access to dangerous tools like "delete files" should not reach for them more often just because someone slipped hostile instructions into a document it read. This measures how much more often it does.
-- **guardaudit.** Safety classifiers say "I am 90% sure this is harmful." Is that 90% honest? This checks, on data unlike what the classifier was trained on, because that is where it breaks.
+- **guardaudit.** Safety classifiers say "I am 90% sure this is harmful." Is that 90% honest? This checks, on data unlike what the classifier was trained on, because that is where it breaks. First run: a widely used classifier caught 94 of 100 harmful requests it had never seen and raised no false alarms, but its confidence numbers were off by more than the plan allowed. Not certified.
 - **budgetguard.** Agent frameworks let you set a spending cap. Does the cap hold when the agent gets stuck in a loop or spawns copies of itself? This tries four ways of blowing the budget and checks the framework's own meter against an outside one.
 - **shadowtrack.** Before replacing the AI behind a product, ask the old and new one the same hundred questions and count the matches. Under 90%, do not swap. It also asks each model the same questions twice, and found that a server at its most repeatable setting only agreed with itself 92% of the time.
 - **attestchain.** Some AI services run inside sealed hardware and hand you a signed receipt saying "this exact program processed your exact request." Almost nobody checks the receipt. This checks it.
@@ -73,11 +73,11 @@ Each one answers "can this published claim be checked?" by pinning down the inpu
 - **releaseflag.** All the tools above each give one verdict. This is the reasoning written down once: any block anywhere blocks the release, any hold holds it, nothing defaults silently.
 - **bench-report.** Every number in every README has to come from a saved result file, never typed by hand. This is the only path from file to table, and it refuses to leave a blank cell. It also writes a fingerprint of every result file so nobody can quietly edit one later.
 
-## The scaffolds
+## The former scaffolds
 
-- **mcpprobe.** Tool servers are the plugs that let an agent read files or query databases. Does a server answer the same way every time, and does it reject obviously broken callers? The math exists; the part that talks to a server does not yet.
-- **rewardcoherence.** Before using a judge model to train another AI, check that the judge agrees with itself. If it ranks the same answers differently each time, it is noise, and training on it will find the noise.
-- **tokenwitness.** The same conversation can be turned into slightly different text by different serving software. Those invisible differences change refusal rates and scores. This shows the two byte streams side by side and points at the first difference.
+- **mcpprobe.** Tool servers are the plugs that let an agent read files or query databases. Does a server answer the same way every time, and does it reject obviously broken callers? First run: two reference servers answered every task correctly eight times out of eight. The "broken caller" check still caught something: one server, asked about an empty folder path, quietly answered about the folder it was started in, so the test could be passed by accident and is marked as such.
+- **rewardcoherence.** Before using a judge model to train another AI, check that the judge agrees with itself. First run: a public judge model ranked a hundred answers almost the same way whether the writer was cautious or adventurous. But a "judge" that only measures answer length agreed with itself just as well, so the result carries a warning flag, as the plan said it would.
+- **tokenwitness.** The same conversation can be turned into slightly different text by different serving software. Those invisible differences change refusal rates and scores. First run: for one model, three different pieces of software produced exactly the same bytes. No difference found, and that is written down as the result.
 
 ## How to read the numbers
 
