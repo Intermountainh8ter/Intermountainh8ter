@@ -2,17 +2,35 @@
 
 I build open-source tools that test whether AI systems do what people claim they do, and I publish the results whether or not they are the results I wanted.
 
-[![Read the plain-English version](https://img.shields.io/badge/New%20here%3F-Read%20the%20plain--English%20version-1d4ed8?style=for-the-badge)](./SIMPLE.md)
+[Read the plain-English version](https://github.com/Intermountainh8ter/Intermountainh8ter/blob/main/SIMPLE.md)
 
-Everything below assumes you know what a language model, a benchmark, and a confidence interval are. If you do not, the button above goes to the same story with every term explained.
+Everything below assumes you know what a language model, a benchmark, and a confidence interval are. If you do not, the link above goes to the same story with every term explained.
+
+## Where this work came from
+
+The public commit history on these repositories starts in mid-October 2026. The work does not start there.
+
+These repositories are the published form of several years of research that I carried out privately, on my own hardware and my own time. For most of that period, it lived in private repositories and local working directories because it was built to answer my own questions, not to be shown to anyone.
+
+In October 2026, I decided to make it public. Between 13 and 17 October, I cleaned up the code, wrote the documentation, and pushed the repositories in a single batch. That is why the first commits sit inside a five-day window. The window is the publishing date. It is not the length of the research.
+
+To be exact about who did what:
+
+- The questions, the experimental designs, the pre-registration rules, the hardware and driver work, the analysis, and the conclusions are mine.
+- I used AI coding tools to help package, document, and publish the code during the release week. They did not choose the questions, design the experiments, or decide what the results mean.
+- Results dated October 2026 were run or re-run in October 2026 under pre-registered rules, and each one is labeled with its date. The methods and tooling behind those runs are what took years.
+
+If you want to verify any of this, open an issue and ask. I would rather answer the question than have it assumed.
 
 ## What this is
 
-Twenty-four repositories, one theme: a claim about an AI system is not a result until the inputs are pinned, the rules are written down before the run, and the number comes with an honest range. The work splits into three families.
+Twenty-eight repositories in two groups: twenty-four on AI systems and four on trading systems. They share one theme: a claim is not a result until the inputs are pinned, the rules are written down before the run, and the number comes with an honest range.
+
+The AI work splits into three families.
 
 **Experiments.** Six research harnesses, each built around one question, each run on real models on my own hardware. They are Python with no required runtime dependencies beyond the standard library (numpy for the retrieval project).
 
-**Checkers.** Fifteen Rust command-line tools. Each takes a claim someone else published (a benchmark row, a jailbreak attack-success rate, "our agent never exceeds its budget," a secure-hardware attestation) and refuses to grade it until the inputs are pinned. Each writes its thresholds before seeing data, reports a 95% bootstrap interval on every rate, and exits with a code a CI job can read: 0 passed, 1 a named pre-registration clause failed, 2 refused to run because an input was degenerate or uncalibrated.
+**Checkers.** Fifteen Rust command-line tools. Each takes a claim someone else published (a benchmark row, a jailbreak attack-success rate, "our agent never exceeds its budget," a secure-hardware attestation) and refuses to grade it until the inputs are pinned. Each writes its thresholds before seeing data, reports a 95% bootstrap interval on every rate, and exits with a code a CI job can read: `0` passed, `1` a named pre-registration clause failed, `2` refused to run because an input was degenerate or uncalibrated.
 
 **Former scaffolds.** Three Rust crates (mcpprobe, rewardcoherence, tokenwitness) whose statistics and pre-registration existed before their live drivers did. On 19 Oct 2026 each gained a live driver and a first result, pre-registered by an appended amendment before the run.
 
@@ -60,22 +78,33 @@ Same method, different market. Pre-registered, rendered from committed results, 
 
 Most of them are negative, which is what careful measurement usually produces and what rarely gets published.
 
-- **Abliteration did not cause the predicted harm.** Across four verified Qwen3 pairs (1.7B to 14B), tool-call accuracy and injection susceptibility moved in the predicted direction on none of them. The 14B uncensored model scored 5.3 points *better* on tool calling; the 4B uncensored model was 6.3 points *harder* to trick. The pre-registered manipulation check (at least a 30-point drop in refusal rate) passed on four pairs; the 0.6B pair fell short because the stock model refuses only 15% to begin with, and it is reported unverified rather than rescued.
+- **Abliteration did not cause the predicted harm.** Across four verified Qwen3 pairs (1.7B to 14B), tool-call accuracy and injection susceptibility moved in the predicted direction on none of them. The 14B uncensored model scored 5.3 points better on tool calling; the 4B uncensored model was 6.3 points harder to trick. The pre-registered manipulation check (at least a 30-point drop in refusal rate) passed on four pairs; the 0.6B pair fell short because the stock model refuses only 15% to begin with, and it is reported as unverified rather than rescued.
 - **But uncensoring shows up in multi-step work.** On trialgauntlet's three environments, the Qwen3-8B uncensored model matched stock on two and collapsed on the hardest (15.3% to 5.7% pass@1), and broke a written policy in 19.2% of 552 trials against 8.3% for stock (0.21 vs 0.09 violations per trial); the 14B pair went 41.3% vs 27.2%. *Corrected 2026-10-19: an earlier version of this line said 52.8% vs 20.4%, which was the config-repair environment alone, mislabeled as the overall. No pass metric changed; the repo README carries the same dated note.*
-- **Refusal rates are a property of the prompt list as much as the model.** Six downloadable models on four published harmful-request lists: non-refusal ranged from 1% to 100%, and HarmBench drew far more compliance than JailbreakBench or AdvBench from every safety-tuned model. A fixed, pre-calibrated grader under-counts Phi-3.5's refusals; the grader was not changed after the fact, and that limitation is reported with the number.
-- **A server at temperature 0 disagreed with itself.** shadowtrack's self-agreement baseline found llama-server under continuous batching reproducing its own answers only 92% of the time, so part of any model-vs-model disagreement on that stack is server noise. The control was built for exactly this and it fired.
+- **Refusal rates are a property of the prompt list as much as the model.** Six downloadable models on four published harmful-request lists: non-refusal ranged from 1% to 100%, and HarmBench drew far more compliance than JailbreakBench or AdvBench from every safety-tuned model. A fixed, pre-calibrated grader undercounts Phi-3.5's refusals; the grader was not changed after the fact, and that limitation is reported with the number.
+- **A server at temperature 0 disagreed with itself.** shadowtrack's self-agreement baseline found llama-server under continuous batching reproducing its own answers only 92% of the time, so part of any model-vs-model disagreement on that stack is server noise. The control was built for exactly this, and it fired.
 - **The expensive retrieval component earned nothing.** On 17,387 chunks of Ethereum specifications, adding a neural embedder to BM25 moved the top-5 hit rate from 81.46% to 81.46%. Only the reranker clearly helped.
 - **"Zero security failures" can be true and misleading.** txwarden's rule-engine verdict never moved under 245 injection attacks, but the LLM-written explanation told the user to proceed on a blocked transaction 79 times.
 - **A safety classifier can catch nearly everything and still fail calibration, and a smaller one can miss most of it.** guardaudit scored Llama Guard 3 8B (Q8_0) on 140 out-of-distribution prompts from its own logprobs: recall 0.94 [0.89, 0.98] and precision 1.00 at its threshold, but ECE 0.040 with an upper bound of 0.065 against a pre-registered gate of 0.05. Not certified. ShieldGemma 2B on the same prompts, with its model card's prompt-only format: recall 0.44 [0.34, 0.54], ECE 0.39. Asked one policy at a time, as the model card does, and scored on the maximum: recall 0.65 [0.56, 0.74], ECE 0.27. Not certified under either protocol; the second protocol was pre-registered as its own row, with the prediction that recall would rise and calibration would still fail, and both held.
-- **The degenerate baseline earned its keep on day one.** mcpprobe's three reference MCP servers passed every scripted task 8 of 8, and the audit still flagged two git tasks: with an empty `repo_path` the server answers for its working directory, so the grader was passable without the right argument.
+- **The degenerate baseline earned its keep on day one.** mcpprobe's three reference MCP servers passed every scripted task 8 of 8, and the audit still flagged two git tasks: with an empty `repo_path`, the server answers for its working directory, so the grader was passable without the right argument.
 - **Two scripted refusal graders agreed exactly; a safety classifier reading the same texts barely agreed with either.** On 1,200 stored JailbreakBench completions, grader v1 and v2 gave identical labels (kappa 1.00). Llama Guard 3, reading each completion as an agent turn, agreed with them 97.4% of the time but with kappa 0.06 [-0.02, 0.23], because non-refusal is rare and what the scripted graders call "did not refuse" the classifier mostly calls harmless. Pre-registered, all four predictions held, one of them by a single item, and the README says so.
 - **Safety controls that do nothing still get trusted.** fleetgate never violated an invariant across 2,460 adversarial runs and 104,828 policy checks, and two of its four safety settings had no measurable effect on any outcome.
 
-Every number above is rendered from a committed result file by [bench-report](https://github.com/Intermountainh8ter/bench-report) or the repo's own docgen, and the result directories carry SHA-256 manifests.
+Every number above is rendered from a committed result file by bench-report or the repo's own docgen, and the result directories carry SHA-256 manifests.
+
+## Open work
+
+This is what has not been done yet, stated as plainly as the results.
+
+- **Checkers without a live run.** codepatchreplay, retrievalaudit, kernelwitness, toolguard, budgetguard, attestchain, provenancepack, contamcheck, and releaseflag are built and tested but have not yet been pointed at a published claim. They need one each.
+- **guardaudit.** Prompt Guard is gated and has not been run.
+- **refusalscope.** The 0.6B pair is unverified because the stock model refuses too rarely for the manipulation check to pass. It stays reported that way.
+- **groundrl.** The GRPO run was degenerate and is reported as a null. A non-degenerate run is still owed.
+- **fillgate.** The paper-venue adapters are built. The pre-registered paper trading record has not started, and no key file exists yet.
+- **harnesspin and agentreplay.** One end-to-end demo and one live replay, respectively. Both need more than one.
 
 ## Rules every repository follows
 
-- Hypotheses, thresholds, and disqualifiers are written in `docs/PREREGISTRATION.md` or `METHODOLOGY.md` before the first run, and the file is append-only. When a rule turned out badly (agentreplay's byte-identity rule fails on volatile response fields; the refusal grader misses Phi-3.5's phrasing), the rule stands and the problem is reported.
+- Hypotheses, thresholds, and disqualifiers are written in `docs/PREREGISTRATION.md` or `METHODOLOGY.md` before the first run, and the file is append-only. When a rule turns out badly (agentreplay's byte-identity rule fails on volatile response fields; the refusal grader misses Phi-3.5's phrasing), the rule stands, and the problem is reported.
 - Every rate carries a 95% percentile bootstrap interval from a seeded generator, so the interval itself reproduces. Gates read the interval bound, never the point estimate.
 - Degenerate baselines run first. A no-op agent, a random ranker, or a blank manifest must score zero before a real result is trusted.
 - No LLM judges. Graders are scripted and deterministic.
